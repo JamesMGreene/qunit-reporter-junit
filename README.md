@@ -1,10 +1,10 @@
-JUnit reporter for QUnit
-============
+[![Build Status](https://travis-ci.org/jquery/qunit-reporter-junit.png)](https://travis-ci.org/jquery/qunit-reporter-junit)
+
+# JUnit reporter for QUnit
 
 A QUnit addon that produces JUnit-style XML test reports (e.g. for integration into build tools like Jenkins).
 
-Usage
------------
+## Usage
 
 Include the addon script after QUnit itself, then implement the `jUnitReport` hook to do something with the XML string (e.g. upload it to a server):
 
@@ -14,7 +14,6 @@ QUnit.jUnitReport = function(report) {
 };
 ```
 
-Notes
------------
+## Notes
 
 If you're using Grunt, you should take a look [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit).

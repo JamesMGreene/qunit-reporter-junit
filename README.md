@@ -17,4 +17,4 @@ QUnit.jUnitReport = function(report) {
 Notes
 -----------
 
-If you're using Grunt, you should take a look at its [qunit task](https://github.com/cowboy/grunt/blob/master/docs/task_qunit.md). Or use [John Bender's grunt-junit plugin](https://github.com/johnbender/grunt-junit) to have the `qunit` task output JUnit-style XML, as this reporter does.
+If you're using Grunt, you should take a look [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit).

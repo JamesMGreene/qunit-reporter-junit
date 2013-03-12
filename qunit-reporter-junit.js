@@ -49,10 +49,10 @@
 				stdout: [],
 				stderr: []
 			};
-			
+
 			currentRun.modules.push(currentModule);
 		}
-		
+
 		// Reset the assertion count
 		assertCount = 0;
 
@@ -86,7 +86,7 @@
 		currentTest.total = data.total;
 		currentTest.passed = data.passed;
 		currentTest.failed = data.failed;
-		
+
 		currentTest = null;
 	});
 
@@ -129,7 +129,7 @@
 		var xmlEncode = function(text) {
 			var baseEntities = {
 				'"' : '&quot;',
-				"'" : '&apos;',
+				'\'': '&apos;',
 				'<' : '&lt;',
 				'>' : '&gt;',
 				'&' : '&amp;'
@@ -154,7 +154,7 @@
 			lineBreakAt = (function(items) {
 				var i, map = {};
 				items = items || [];
-				
+
 				i = items.length;
 				while (i--) {
 					map[items[i]] = {};

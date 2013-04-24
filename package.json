@@ -2,7 +2,7 @@
 	"name": "qunit-reporter-junit",
 	"title": "JUnit reporter for QUnit",
 	"description": "Produce JUnit-style XML test reports with QUnit.",
-	"version": "1.0.1pre",
+	"version": "1.0.1",
 	"author": {
 		"name": "jQuery Foundation and other contributors",
 		"url": "https://github.com/jquery/qunit-reporter-junit/blob/master/AUTHORS.txt"
@@ -21,8 +21,8 @@
 	},
 	"keywords": [
 		"qunit",
-		"plugin",
-		"reporter",
+		"qunit-plugin",
+		"qunit-reporter",
 		"junit"
 	],
 	"main": "qunit-reporter-junit.js",

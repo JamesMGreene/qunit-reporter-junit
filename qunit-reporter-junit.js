@@ -1,4 +1,14 @@
+/**
+ * JUnit reporter for QUnit v1.0.1pre
+ *
+ * https://github.com/jquery/qunit-reporter-junit
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * https://jquery.org/license/
+ */
 (function() {
+
 	'use strict';
 
 	var currentRun, currentModule, currentTest, assertCount;

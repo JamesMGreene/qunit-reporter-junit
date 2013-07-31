@@ -32,20 +32,18 @@
 	function getUsefulModuleName(dataName) {
 		try {
 			if(dataName === undefined) {
-				var i = location.pathname.lastIndexOf("/");
+				var i = location.pathname.lastIndexOf('/');
 				var name = location.pathname.substring(i + 1, location.pathname.length);
-				i = name.indexOf(".html", name.length - ".html".length);
+				i = name.indexOf('.html', name.length - '.html'.length);
 				if(i !== -1) {
 					name = name.substring(0, i);
 				}
 				return name;
 			}
-		} catch(e) {
-			
-		}
+		} catch(e) {}
 		return dataName;
 	}
-	
+
 	QUnit.moduleStart(function(data) {
 		currentModule = {
 			name: getUsefulModuleName(data.name),

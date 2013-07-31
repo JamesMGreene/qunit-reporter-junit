@@ -11,7 +11,7 @@
 
 	'use strict';
 
-	var currentRun, currentModule, currentTest, assertCount;
+	var currentRun, currentModule, currentTest = {}, assertCount;
 
 	// Gets called when a report is generated.
 	QUnit.jUnitReport = function(/* data */) {
@@ -29,9 +29,26 @@
 		};
 	});
 
+	function getUsefulModuleName(dataName) {
+		try {
+			if(dataName === undefined) {
+				var i = location.pathname.lastIndexOf("/");
+				var name = location.pathname.substring(i + 1, location.pathname.length);
+				i = name.indexOf(".html", name.length - ".html".length);
+				if(i !== -1) {
+					name = name.substring(0, i);
+				}
+				return name;
+			}
+		} catch(e) {
+			
+		}
+		return dataName;
+	}
+	
 	QUnit.moduleStart(function(data) {
 		currentModule = {
-			name: data.name,
+			name: getUsefulModuleName(data.name),
 			tests: [],
 			total: 0,
 			passed: 0,
@@ -46,10 +63,9 @@
 	});
 
 	QUnit.testStart(function(data) {
-		// Setup default module if no module was specified
 		if (!currentModule) {
 			currentModule = {
-				name: data.module || 'default',
+				name: getUsefulModuleName() || 'default',
 				tests: [],
 				total: 0,
 				passed: 0,
@@ -66,7 +82,7 @@
 		// Reset the assertion count
 		assertCount = 0;
 
-		currentTest = {
+		currentTest[data.name] = {
 			name: data.name,
 			failedAssertions: [],
 			total: 0,
@@ -76,28 +92,27 @@
 			time: 0
 		};
 
-		currentModule.tests.push(currentTest);
+		currentModule.tests.push(currentTest[data.name]);
 	});
 
 	QUnit.log(function(data) {
 		assertCount++;
-
 		// Ignore passing assertions
 		if (!data.result) {
-			currentTest.failedAssertions.push(data);
+			currentTest[data.name].failedAssertions.push(data);
 
 			// Add log message of failure to make it easier to find in Jenkins CI
-			currentModule.stdout.push('[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' + data.message);
+			currentModule.stdout.push('[' + currentModule.name + ', ' + data.name + ', ' + assertCount + '] ' + data.message);
 		}
 	});
 
 	QUnit.testDone(function(data) {
-		currentTest.time = (new Date()).getTime() - currentTest.start.getTime();  // ms
-		currentTest.total = data.total;
-		currentTest.passed = data.passed;
-		currentTest.failed = data.failed;
-
-		currentTest = null;
+		var t = currentTest[data.name];
+		delete currentTest[data.name];
+		t.time = (new Date()).getTime() - t.start.getTime();  // ms
+		t.total = data.total;
+		t.passed = data.passed;
+		t.failed = data.failed;
 	});
 
 	QUnit.moduleDone(function(data) {

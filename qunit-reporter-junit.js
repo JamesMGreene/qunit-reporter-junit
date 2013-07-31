@@ -257,7 +257,7 @@
 			tests: run.total,
 			failures: run.failed,
 			errors: 0,
-			time: convertMillisToSeconds(run.time),  // ms → sec
+			time: convertMillisToSeconds(run.time),  // ms â†’ sec
 			timestamp: toISODateString(run.start)
 		});
 
@@ -271,7 +271,7 @@
 				tests: module.total,
 				failures: module.failed,
 				errors: 0,
-				time: convertMillisToSeconds(module.time),  // ms → sec
+				time: convertMillisToSeconds(module.time),  // ms â†’ sec
 				timestamp: toISODateString(module.start)
 			});
 
@@ -283,7 +283,7 @@
 					tests: test.total,
 					failures: test.failed,
 					errors: 0,
-					time: convertMillisToSeconds(test.time),  // ms → sec
+					time: convertMillisToSeconds(test.time),  // ms â†’ sec
 					timestamp: toISODateString(test.start)
 				});
 

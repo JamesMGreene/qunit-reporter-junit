@@ -15,9 +15,11 @@ grunt.initConfig({
 	},
 	connect: {
 		server: {
-			port: 8000,
-			hostname: 'localhost',
-			base: '.'
+			options: {
+				port: 8000,
+				hostname: 'localhost',
+				base: '.'
+			}
 		}
 	}
 });

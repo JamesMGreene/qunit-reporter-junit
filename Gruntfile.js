@@ -8,7 +8,7 @@ grunt.loadNpmTasks( 'grunt-contrib-connect' );
 grunt.initConfig({
 	jshint: {
 		options: {
-				jshintrc: '.jshintrc'
+			jshintrc: '.jshintrc'
 		},
 		main: [ '*.js' ],
 		tests: [ 'test/**/*.js' ]
@@ -63,6 +63,7 @@ grunt.registerTask('qunit', 'Run the test suite on PhantomJS', function () {
 			actual = normalise(String(actual).trim());
 
 			if ( expected === actual ) {
+				grunt.log.ok('XML output matches expected pattern.');
 				done();
 			} else if (err) {
 				grunt.warn(err);

@@ -17,7 +17,7 @@
 	},
 	"license": {
 		"name": "MIT",
-		"url": "http://www.opensource.org/licenses/mit-license.php"
+		"url": "https://github.com/jquery/qunit-reporter-junit/blob/master/LICENSE.txt"
 	},
 	"keywords": [
 		"qunit",

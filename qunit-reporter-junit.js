@@ -8,6 +8,7 @@
  * https://jquery.org/license/
  */
 (function() {
+	
 	'use strict';
 
 	var currentRun, currentModule, currentTest = {}, assertCount;

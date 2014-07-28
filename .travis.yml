@@ -6,4 +6,4 @@ before_script:
 notifications:
   irc:
     channels:
-      - "chat.freenode.net#jquery-testing"
+      - "chat.freenode.net#jquery-dev"

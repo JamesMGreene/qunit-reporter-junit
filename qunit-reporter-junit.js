@@ -11,11 +11,20 @@
 
 	'use strict';
 
-	var currentRun, currentModule, currentTest, assertCount;
+	var currentRun = {
+	    modules: [],
+	    total: 0,
+	    passed: 0,
+	    failed: 0,
+	    start: new Date(),
+	    time: 0
+	}, currentModule, currentTest, assertCount;
 
 	// Gets called when a report is generated.
-	QUnit.jUnitReport = function(/* data */) {
-		// Override me!
+	QUnit.jUnitReport = function (results, xml) {
+	    console.log(results);
+	    console.log(xml);
+	    // Override me!
 	};
 
 	QUnit.begin(function() {
@@ -84,10 +93,16 @@
 
 		// Ignore passing assertions
 		if (!data.result) {
-			currentTest.failedAssertions.push(data);
+		    var testName = '<none>';
+		    if (currentTest) {
+		        currentTest.failedAssertions.push(data);
+		        testName = currentTest.name;
+		    }
 
-			// Add log message of failure to make it easier to find in Jenkins CI
-			currentModule.stdout.push('[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' + data.message);
+		    // Add log message of failure to make it easier to find in Jenkins CI
+		    if (currentModule) {
+		        currentModule.stdout.push('[' + currentModule.name + ', ' + testName + ', ' + assertCount + '] ' + data.message);
+		    }
 		}
 	});
 
@@ -236,13 +251,19 @@
 				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'system-out', 'system-err']
 			});
 
+		var name;
+		if (typeof window !== 'undefined') {
+		    name = window.location && window.location.href;
+		}
+	    name = name || (run.modules.length === 1 && run.modules[0].name);
+
 		xmlWriter.start('testsuites', {
-			name: (window && window.location && window.location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
+			name: name || null,
 			hostname: 'localhost',
 			tests: run.total,
 			failures: run.failed,
 			errors: 0,
-			time: convertMillisToSeconds(run.time),  // ms → sec
+			time: convertMillisToSeconds(run.time),  // ms sec
 			timestamp: toISODateString(run.start)
 		});
 
@@ -256,7 +277,7 @@
 				tests: module.total,
 				failures: module.failed,
 				errors: 0,
-				time: convertMillisToSeconds(module.time),  // ms → sec
+				time: convertMillisToSeconds(module.time),  // ms sec
 				timestamp: toISODateString(module.start)
 			});
 
@@ -268,7 +289,7 @@
 					tests: test.total,
 					failures: test.failed,
 					errors: 0,
-					time: convertMillisToSeconds(test.time),  // ms → sec
+					time: convertMillisToSeconds(test.time),  // ms sec
 					timestamp: toISODateString(test.start)
 				});
 

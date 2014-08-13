@@ -21,9 +21,7 @@
 	}, currentModule, currentTest, assertCount;
 
 	// Gets called when a report is generated.
-	QUnit.jUnitReport = function (results, xml) {
-	    console.log(results);
-	    console.log(xml);
+	QUnit.jUnitReport = function (/*results, xml*/) {
 	    // Override me!
 	};
 

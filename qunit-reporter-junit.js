@@ -1,7 +1,7 @@
 /**
- * JUnit reporter for QUnit v1.0.2pre
+ * JUnit reporter for QUnit v1.0.2
  *
- * https://github.com/jquery/qunit-reporter-junit
+ * https://github.com/JamesMGreene/qunit-reporter-junit
  *
  * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.

@@ -3,7 +3,3 @@ node_js:
   - "0.10"
 before_script:
   - npm install -g grunt-cli
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#jquery-dev"

@@ -1,5 +1,5 @@
 /**
- * JUnit reporter for QUnit v1.0.2
+ * JUnit reporter for QUnit v1.0.3-pre
  *
  * https://github.com/JamesMGreene/qunit-reporter-junit
  *

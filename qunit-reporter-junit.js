@@ -20,6 +20,19 @@
 	    time: 0
 	}, currentModule, currentTest, assertCount;
 
+    var path = require('path');
+
+    function getModuleName(module) {
+        if (typeof module == 'undefined') {
+            return;
+        }
+        if (typeof module == 'string') {
+            return path.basename(module, '.js');
+        } else {
+            return path.basename(module.path, '.js');
+        }
+    }
+
 	// Gets called when a report is generated.
 	QUnit.jUnitReport = function (/*results, xml*/) {
 	    // Override me!
@@ -56,7 +69,7 @@
 		// Setup default module if no module was specified
 		if (!currentModule) {
 			currentModule = {
-				name: data.module || 'default',
+				name: getModuleName(data.module) || 'default',
 				tests: [],
 				total: 0,
 				passed: 0,
@@ -98,8 +111,26 @@
 		    }
 
 		    // Add log message of failure to make it easier to find in Jenkins CI
-		    if (currentModule) {
-		        currentModule.stdout.push('[' + currentModule.name + ', ' + testName + ', ' + assertCount + '] ' + data.message);
+            if (currentModule) {
+                var stdout = currentModule.stdout;
+                stdout.push('\nModule: ' + getModuleName(data.module) + ' Test: ' + testName);
+                if (data.message) {
+                    stdout.push(data.message);
+                }
+
+                if (data.source) {
+                    stdout.push(data.source);
+                }
+
+                if (data.expected != null || data.actual != null) {
+                    //it will be an error if data.expected !== data.actual, but if they're
+                    //both undefined, it means that they were just not filled out because
+                    //no assertions were hit (likely due to code error that would have been logged as source or message).
+                    stdout.push('Actual value:');
+                    stdout.push(data.actual);
+                    stdout.push('Expected value:');
+                    stdout.push(data.expected);
+                }
 		    }
 		}
 	});

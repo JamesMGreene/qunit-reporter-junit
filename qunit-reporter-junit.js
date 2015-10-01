@@ -11,11 +11,31 @@
 
 	'use strict';
 
-	var currentRun, currentModule, currentTest, assertCount;
+	var currentRun = {
+	    modules: [],
+	    total: 0,
+	    passed: 0,
+	    failed: 0,
+	    start: new Date(),
+	    time: 0
+	}, currentModule, currentTest, assertCount;
+
+    var path = require('path');
+
+    function getModuleName(module) {
+        if (typeof module == 'undefined') {
+            return;
+        }
+        if (typeof module == 'string') {
+            return path.basename(module, '.js');
+        } else {
+            return path.basename(module.path, '.js');
+        }
+    }
 
 	// Gets called when a report is generated.
-	QUnit.jUnitReport = function(/* data */) {
-		// Override me!
+	QUnit.jUnitReport = function (/*results, xml*/) {
+	    // Override me!
 	};
 
 	QUnit.begin(function() {
@@ -49,7 +69,7 @@
 		// Setup default module if no module was specified
 		if (!currentModule) {
 			currentModule = {
-				name: data.module || 'default',
+				name: getModuleName(data.module) || 'default',
 				tests: [],
 				total: 0,
 				passed: 0,
@@ -84,10 +104,34 @@
 
 		// Ignore passing assertions
 		if (!data.result) {
-			currentTest.failedAssertions.push(data);
+		    var testName = '<none>';
+		    if (currentTest) {
+		        currentTest.failedAssertions.push(data);
+		        testName = currentTest.name;
+		    }
 
-			// Add log message of failure to make it easier to find in Jenkins CI
-			currentModule.stdout.push('[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' + data.message);
+		    // Add log message of failure to make it easier to find in Jenkins CI
+            if (currentModule) {
+                var stdout = currentModule.stdout;
+                stdout.push('\nModule: ' + getModuleName(data.module) + ' Test: ' + testName);
+                if (data.message) {
+                    stdout.push(data.message);
+                }
+
+                if (data.source) {
+                    stdout.push(data.source);
+                }
+
+                if (data.expected != null || data.actual != null) {
+                    //it will be an error if data.expected !== data.actual, but if they're
+                    //both undefined, it means that they were just not filled out because
+                    //no assertions were hit (likely due to code error that would have been logged as source or message).
+                    stdout.push('Actual value:');
+                    stdout.push(data.actual);
+                    stdout.push('Expected value:');
+                    stdout.push(data.expected);
+                }
+		    }
 		}
 	});
 
@@ -236,13 +280,19 @@
 				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'system-out', 'system-err']
 			});
 
+		var name;
+		if (typeof window !== 'undefined') {
+		    name = window.location && window.location.href;
+		}
+	    name = name || (run.modules.length === 1 && run.modules[0].name);
+
 		xmlWriter.start('testsuites', {
-			name: (window && window.location && window.location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
+			name: name || null,
 			hostname: 'localhost',
 			tests: run.total,
 			failures: run.failed,
 			errors: 0,
-			time: convertMillisToSeconds(run.time),  // ms → sec
+			time: convertMillisToSeconds(run.time),  // ms sec
 			timestamp: toISODateString(run.start)
 		});
 
@@ -256,7 +306,7 @@
 				tests: module.total,
 				failures: module.failed,
 				errors: 0,
-				time: convertMillisToSeconds(module.time),  // ms → sec
+				time: convertMillisToSeconds(module.time),  // ms sec
 				timestamp: toISODateString(module.start)
 			});
 
@@ -268,7 +318,7 @@
 					tests: test.total,
 					failures: test.failed,
 					errors: 0,
-					time: convertMillisToSeconds(test.time),  // ms → sec
+					time: convertMillisToSeconds(test.time),  // ms sec
 					timestamp: toISODateString(test.start)
 				});
 

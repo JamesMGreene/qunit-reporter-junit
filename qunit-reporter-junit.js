@@ -1,5 +1,5 @@
 /**
- * JUnit reporter for QUnit v1.0.3-pre
+ * JUnit reporter for QUnit
  *
  * https://github.com/JamesMGreene/qunit-reporter-junit
  *
@@ -8,7 +8,6 @@
  * https://jquery.org/license/
  */
 (function() {
-
 	'use strict';
 
 	var currentRun, currentModule, currentTest, assertCount;

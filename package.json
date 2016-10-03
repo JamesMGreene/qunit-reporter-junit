@@ -1,47 +1,50 @@
 {
-	"name": "qunit-reporter-junit",
-	"title": "JUnit reporter for QUnit",
-	"description": "Produce JUnit-style XML test reports with QUnit.",
-	"version": "1.0.3-pre",
-	"author": {
-		"name": "jQuery Foundation and other contributors",
-		"url": "https://github.com/JamesMGreene/qunit-reporter-junit/blob/master/AUTHORS.txt"
-	},
-	"maintainers": [
-		{
-			"name": "James M. Greene",
-			"email": "james.m.greene@gmail.com",
-			"url": "http://greene.io/"
-		}
-	],
-	"homepage": "https://github.com/JamesMGreene/qunit-reporter-junit",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/JamesMGreene/qunit-reporter-junit.git"
-	},
-	"bugs": {
-		"url": "https://github.com/JamesMGreene/qunit-reporter-junit/issues"
-	},
-	"license": {
-		"name": "MIT",
-		"url": "https://github.com/JamesMGreene/qunit-reporter-junit/blob/master/LICENSE.txt"
-	},
-	"keywords": [
-		"qunit",
-		"qunit-plugin",
-		"qunit-reporter",
-		"junit"
-	],
-	"main": "qunit-reporter-junit.js",
-	"scripts": {
-		"test": "grunt test"
-	},
-	"devDependencies": {
-		"grunt": "~0.4.0",
-		"grunt-contrib-connect": "~0.7.0",
-		"grunt-contrib-jshint": "~0.9.0",
-		"grunt-git-authors": "~1.2.0",
-		"grunt-lib-phantomjs": "~0.6.0",
-		"qunitjs": "1.x"
-	}
+  "name": "qunit-reporter-junit",
+  "title": "JUnit reporter for QUnit",
+  "description": "Produce JUnit-style XML test reports with QUnit.",
+  "version": "1.0.3-pre",
+  "author": {
+    "name": "jQuery Foundation and other contributors",
+    "url": "https://github.com/JamesMGreene/qunit-reporter-junit/blob/master/AUTHORS.txt"
+  },
+  "maintainers": [
+    {
+      "name": "James M. Greene",
+      "email": "james.m.greene@gmail.com",
+      "url": "http://greene.io/"
+    }
+  ],
+  "homepage": "https://github.com/JamesMGreene/qunit-reporter-junit",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JamesMGreene/qunit-reporter-junit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JamesMGreene/qunit-reporter-junit/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "qunit",
+    "qunit-plugin",
+    "qunit-reporter",
+    "junit",
+    "xunit",
+    "ci",
+    "jenkins"
+  ],
+  "main": "qunit-reporter-junit.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "peerDependencies": {
+    "qunitjs": "*"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-git-authors": "^3.2.0",
+    "grunt-lib-phantomjs": "^1.1.0",
+    "qunitjs": "^2.0.1"
+  }
 }

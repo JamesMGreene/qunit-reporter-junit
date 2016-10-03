@@ -8,10 +8,10 @@
  * https://jquery.org/license/
  */
 (function() {
-
+	
 	'use strict';
 
-	var currentRun, currentModule, currentTest, assertCount;
+	var currentRun, currentModule, currentTest = {}, assertCount;
 
 	// Gets called when a report is generated.
 	QUnit.jUnitReport = function(/* data */) {
@@ -29,9 +29,25 @@
 		};
 	});
 
+	function getUsefulModuleName(dataName) {
+		if(dataName === undefined) {
+			if(typeof location === 'undefined') {
+				// Support node.js
+				return dataName;
+			}
+			var i = location.pathname.lastIndexOf('/');
+			var name = location.pathname.substring(i + 1);
+			if ( name.slice( -5 ) === '.html' ) {
+    			name = name.slice( 0, -5 );
+			}
+			return name;
+		}
+		return dataName;
+	}
+
 	QUnit.moduleStart(function(data) {
 		currentModule = {
-			name: data.name,
+			name: getUsefulModuleName(data.name),
 			tests: [],
 			total: 0,
 			passed: 0,
@@ -46,16 +62,15 @@
 	});
 
 	QUnit.testStart(function(data) {
-		// Setup default module if no module was specified
 		if (!currentModule) {
 			currentModule = {
-				name: data.module || 'default',
+				name: getUsefulModuleName() || 'default',
 				tests: [],
 				total: 0,
 				passed: 0,
 				failed: 0,
 				start: new Date(),
-				time: 0,
+				time: 0, 
 				stdout: [],
 				stderr: []
 			};
@@ -66,7 +81,7 @@
 		// Reset the assertion count
 		assertCount = 0;
 
-		currentTest = {
+		currentTest[data.module + "_" + data.name] = {
 			name: data.name,
 			failedAssertions: [],
 			total: 0,
@@ -76,28 +91,27 @@
 			time: 0
 		};
 
-		currentModule.tests.push(currentTest);
+		currentModule.tests.push(currentTest[data.module + "_" + data.name]);
 	});
 
 	QUnit.log(function(data) {
 		assertCount++;
-
 		// Ignore passing assertions
 		if (!data.result) {
-			currentTest.failedAssertions.push(data);
+			currentTest[data.module + "_" + data.name].failedAssertions.push(data);
 
 			// Add log message of failure to make it easier to find in Jenkins CI
-			currentModule.stdout.push('[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' + data.message);
+			currentModule.stdout.push('[' + currentModule.name + ', ' + data.name + ', ' + assertCount + '] ' + data.message);
 		}
 	});
 
 	QUnit.testDone(function(data) {
-		currentTest.time = (new Date()).getTime() - currentTest.start.getTime();  // ms
-		currentTest.total = data.total;
-		currentTest.passed = data.passed;
-		currentTest.failed = data.failed;
-
-		currentTest = null;
+		var t = currentTest[data.module + "_" + data.name];
+		delete currentTest[data.module + "_" + data.name];
+		t.time = (new Date()).getTime() - t.start.getTime();  // ms
+		t.total = data.total;
+		t.passed = data.passed;
+		t.failed = data.failed;
 	});
 
 	QUnit.moduleDone(function(data) {
@@ -125,11 +139,11 @@
 
 		var toISODateString = function(d) {
 			return d.getUTCFullYear() + '-' +
-				pad(d.getUTCMonth() + 1)+'-' +
-				pad(d.getUTCDate()) + 'T' +
-				pad(d.getUTCHours()) + ':' +
-				pad(d.getUTCMinutes()) + ':' +
-				pad(d.getUTCSeconds()) + 'Z';
+			pad(d.getUTCMonth() + 1)+'-' +
+			pad(d.getUTCDate()) + 'T' +
+			pad(d.getUTCHours()) + ':' +
+			pad(d.getUTCMinutes()) + ':' +
+			pad(d.getUTCSeconds()) + 'Z';
 		};
 
 		var convertMillisToSeconds = function(ms) {
@@ -232,9 +246,9 @@
 
 		// Generate JUnit XML report!
 		var m, mLen, module, t, tLen, test, a, aLen, assertion, isEmptyElement,
-			xmlWriter = new XmlWriter({
-				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'system-out', 'system-err']
-			});
+		xmlWriter = new XmlWriter({
+			linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'system-out', 'system-err']
+		});
 
 		xmlWriter.start('testsuites', {
 			name: (typeof location !== 'undefined' && location && location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
@@ -242,7 +256,7 @@
 			tests: run.total,
 			failures: run.failed,
 			errors: 0,
-			time: convertMillisToSeconds(run.time),  // ms → sec
+			time: convertMillisToSeconds(run.time),   
 			timestamp: toISODateString(run.start)
 		});
 
@@ -256,7 +270,7 @@
 				tests: module.total,
 				failures: module.failed,
 				errors: 0,
-				time: convertMillisToSeconds(module.time),  // ms → sec
+				time: convertMillisToSeconds(module.time),   
 				timestamp: toISODateString(module.start)
 			});
 
@@ -268,7 +282,7 @@
 					tests: test.total,
 					failures: test.failed,
 					errors: 0,
-					time: convertMillisToSeconds(test.time),  // ms → sec
+					time: convertMillisToSeconds(test.time),   
 					timestamp: toISODateString(test.start)
 				});
 

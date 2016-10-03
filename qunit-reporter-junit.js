@@ -238,12 +238,10 @@
 
 		xmlWriter.start('testsuites', {
 			name: (typeof location !== 'undefined' && location && location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
-			hostname: 'localhost',
 			tests: run.total,
 			failures: run.failed,
 			errors: 0,
-			time: convertMillisToSeconds(run.time),  // ms → sec
-			timestamp: toISODateString(run.start)
+			time: convertMillisToSeconds(run.time)  // ms → sec
 		});
 
 		for (m = 0, mLen = run.modules.length; m < mLen; m++) {
@@ -265,9 +263,6 @@
 
 				xmlWriter.start('testcase', {
 					name: test.name,
-					tests: test.total,
-					failures: test.failed,
-					errors: 0,
 					time: convertMillisToSeconds(test.time),  // ms → sec
 					timestamp: toISODateString(test.start)
 				});

@@ -1,13 +1,5 @@
 (function( module, test ) {
 
-	QUnit.jUnitReport = function(data) {
-		var console = window.console;
-		if (console) {
-			console.log(data.xml);
-		}
-	};
-
-
 	module('Module 1');
 
 	test('test 1', function(assert) {

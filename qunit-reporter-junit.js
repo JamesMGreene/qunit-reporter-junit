@@ -10,11 +10,44 @@
 (function() {
 	'use strict';
 
-	var currentRun, currentModule, currentTest, assertCount;
+	var currentRun, currentModule, currentTest, assertCount,
+			jUnitReportData, _executeRegisteredCallbacks,
+			jUnitDoneCallbacks = [];
 
+	// Old API
 	// Gets called when a report is generated.
 	QUnit.jUnitReport = function(/* data */) {
 		// Override me!
+	};
+
+	// New API
+	QUnit.jUnitDone = function(cb) {
+		if (typeof cb === 'function') {
+			// If QUnit is already done running, just execute the newly registered callback immediately
+			if (jUnitReportData) {
+				cb(jUnitReportData);
+			}
+			else {
+				jUnitDoneCallbacks.push(cb);
+			}
+		}
+	};
+
+	_executeRegisteredCallbacks = function() {
+		// New API support
+		var cb;
+		do {
+			cb = jUnitDoneCallbacks.shift();
+			if (typeof cb === 'function') {
+				cb(jUnitReportData);
+			}
+		}
+		while (jUnitDoneCallbacks.length > 0);
+
+		// Old API support
+		if (typeof QUnit.jUnitReport === 'function') {
+			QUnit.jUnitReport(jUnitReportData);
+		}
 	};
 
 	QUnit.begin(function() {
@@ -150,9 +183,15 @@
 		};
 
 		var XmlWriter = function(settings) {
+			if (!(this instanceof XmlWriter)) {
+				return new XmlWriter(settings);
+			}
+
 			settings = settings || {};
 
-			var data = [], stack = [], lineBreakAt;
+			var data = [],
+					stack = [],
+					lineBreakAt;
 
 			var addLineBreak = function(name) {
 				if (lineBreakAt[name] && data[data.length - 1] !== '\n') {
@@ -301,11 +340,13 @@
 		xmlWriter.end();  //'testsuites'
 
 
-		// Invoke the user-defined callback
-		QUnit.jUnitReport({
+		// Save the results to be passed to any pertinent user-defined callbacks
+		jUnitReportData = {
 			results: results,
 			xml: xmlWriter.getString()
-		});
+		};
+
+		_executeRegisteredCallbacks();
 	};
 
 })();

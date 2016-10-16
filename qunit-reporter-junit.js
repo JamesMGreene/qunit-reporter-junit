@@ -119,7 +119,10 @@
 			currentTest.failedAssertions.push(data);
 
 			// Add log message of failure to make it easier to find in Jenkins CI
-			currentModule.stdout.push('[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' + data.message);
+			currentModule.stdout.push(
+				'[' + currentModule.name + ', ' + currentTest.name + ', ' + assertCount + '] ' +
+				data.message + ( data.source ? '\nSource: ' + data.source : '' )
+			);
 		}
 	});
 
@@ -170,15 +173,18 @@
 
 		var xmlEncode = function(text) {
 			var baseEntities = {
-				'"' : '&quot;',
-				'\'': '&apos;',
 				'<' : '&lt;',
 				'>' : '&gt;',
-				'&' : '&amp;'
+				'&' : '&amp;',
+				'"' : '&quot;',
+				'\'': '&apos;',
+				'\r': '',
+				'\n': '&#10;',
+				'\t': '&#9;'
 			};
 
-			return ('' + text).replace(/[<>&\"\']/g, function(chr) {
-				return baseEntities[chr] || chr;
+			return ('' + text).replace(/[<>&"'\r\n\t]/g, function(chr) {
+				return baseEntities.hasOwnProperty(chr) ? baseEntities[chr] : chr;
 			});
 		};
 
@@ -271,7 +277,7 @@
 		// Generate JUnit XML report!
 		var m, mLen, module, t, tLen, test, a, aLen, assertion, isEmptyElement,
 			xmlWriter = new XmlWriter({
-				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'system-out', 'system-err']
+				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'expected', 'actual', 'system-out', 'system-err']
 			});
 
 		xmlWriter.start('testsuites', {

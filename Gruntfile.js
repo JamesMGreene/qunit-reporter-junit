@@ -106,40 +106,45 @@ module.exports = function( grunt ) {
 				'<testsuite id="0" name="Module 1" hostname="localhost" tests="5" failures="2" errors="0" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<testcase name="test 1" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<failure type="AssertionFailedError" message="Assert fail 1 = 2">\\n' +
-				'<actual value="1" /><expected value="2" />\\n' +
+				'<actual value="1" />\\n' +
+				'<expected value="2" />\\n' +
 				'</failure>\\n' +
 				'</testcase>\\n' +
 				'<testcase name="test 2" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<failure type="AssertionFailedError" message="Assert fail 1 = 2">\\n' +
-				'<actual value="1" /><expected value="2" />\\n' +
+				'<actual value="1" />\\n' +
+				'<expected value="2" />\\n' +
 				'</failure>\\n' +
 				'</testcase>\\n' +
 				'<system-out>\\n' +
 				'<!\\[CDATA\\[\\n' +
-				'\\[Module 1, test 1, 2\\] Assert fail 1 = 2\\n' +
-				'\\[Module 1, test 2, 2\\] Assert fail 1 = 2\\n' +
+				'\\[Module 1, test 1, 2\\] Assert fail 1 = 2(\\nSource: [^\\[\\]]+)?\\n' +
+				'\\[Module 1, test 2, 2\\] Assert fail 1 = 2(\\nSource: [^\\[\\]]+)?\\n' +
 				'\\]\\]>\\n' +
 				'</system-out>\\n' +
 				'</testsuite>\\n' +
 				'<testsuite id="1" name="Module 2" hostname="localhost" tests="5" failures="3" errors="0" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<testcase name="test 3" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<failure type="AssertionFailedError" message="Assert fail 1 = 2">\\n' +
-				'<actual value="1" /><expected value="2" />\\n' +
+				'<actual value="1" />\\n' +
+				'<expected value="2" />\\n' +
 				'</failure>\\n' +
 				'</testcase>\\n' +
 				'<testcase name="test 4" time="\\d+(\\.\\d+)?" timestamp="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z">\\n' +
 				'<failure type="AssertionFailedError" message="Assert fail 1 = 2">\\n' +
-				'<actual value="1" /><expected value="2" />\\n' +
+				'<actual value="1" />\\n' +
+				'<expected value="2" />\\n' +
 				'</failure>\\n' +
 				'<failure type="AssertionFailedError" message="Assert fail 1 = 3">\\n' +
-				'<actual value="1" /><expected value="3" />\\n' +
+				'<actual value="1" />\\n' +
+				'<expected value="3" />\\n' +
 				'</failure>\\n' +
 				'</testcase>\\n' +
 				'<system-out>\\n' +
 				'<!\\[CDATA\\[\\n' +
-				'\\[Module 2, test 3, 2\\] Assert fail 1 = 2\\n' +
-				'\\[Module 2, test 4, 2\\] Assert fail 1 = 2\\n' +
-				'\\[Module 2, test 4, 3\\] Assert fail 1 = 3\\n' +
+				'\\[Module 2, test 3, 2\\] Assert fail 1 = 2\\n(Source: [^\\[\\]]+)?\\n' +
+				'\\[Module 2, test 4, 2\\] Assert fail 1 = 2\\n(Source: [^\\[\\]]+)?\\n' +
+				'\\[Module 2, test 4, 3\\] Assert fail 1 = 3\\n(Source: [^\\[\\]]+)?\\n' +
 				'\\]\\]>\\n' +
 				'</system-out>\\n' +
 				'</testsuite>\\n' +

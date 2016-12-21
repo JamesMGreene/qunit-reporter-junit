@@ -277,48 +277,48 @@
 		// Generate JUnit XML report!
 		var m, mLen, module, t, tLen, test, a, aLen, assertion, isEmptyElement,
 			xmlWriter = new XmlWriter({
-				linebreak_at: ['testsuites', 'testsuite', 'testcase', 'failure', 'expected', 'actual', 'system-out', 'system-err']
+				'linebreak_at': ['testsuites', 'testsuite', 'testcase', 'failure', 'expected', 'actual', 'system-out', 'system-err']
 			});
 
 		xmlWriter.start('testsuites', {
-			"name": (typeof location !== 'undefined' && location && location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
-			"tests": run.total,
-			"failures": run.failed,
-			"errors": 0,
-			"time": convertMillisToSeconds(run.time)  // ms → sec
+			'name': (typeof location !== 'undefined' && location && location.href) || (run.modules.length === 1 && run.modules[0].name) || null,
+			'tests': run.total,
+			'failures': run.failed,
+			'errors': 0,
+			'time': convertMillisToSeconds(run.time)  // ms → sec
 		});
 
 		for (m = 0, mLen = run.modules.length; m < mLen; m++) {
 			module = run.modules[m];
 
 			xmlWriter.start('testsuite', {
-				"id": m,
-				"name": module.name,
-				"hostname": 'localhost',
-				"tests": module.total,
-				"failures": module.failed,
-				"errors": 0,
-				"time": convertMillisToSeconds(module.time),  // ms → sec
-				"timestamp": toISODateString(module.start)
+				'id': m,
+				'name': module.name,
+				'hostname': 'localhost',
+				'tests': module.total,
+				'failures': module.failed,
+				'errors': 0,
+				'time': convertMillisToSeconds(module.time),  // ms → sec
+				'timestamp': toISODateString(module.start)
 			});
 
 			for (t = 0, tLen = module.tests.length; t < tLen; t++) {
 				test = module.tests[t];
 
 				xmlWriter.start('testcase', {
-					"name": test.name,
-					"time": convertMillisToSeconds(test.time),  // ms → sec
-					"timestamp": toISODateString(test.start)
+					'name': test.name,
+					'time': convertMillisToSeconds(test.time),  // ms → sec
+					'timestamp': toISODateString(test.start)
 				});
 
 				for (a = 0, aLen = test.failedAssertions.length; a < aLen; a++) {
 					assertion = test.failedAssertions[a];
 
 					isEmptyElement = assertion && !(assertion.actual && assertion.expected);
-					xmlWriter.start('failure', { "type": 'AssertionFailedError', "message": assertion.message }, isEmptyElement);
+					xmlWriter.start('failure', { 'type': 'AssertionFailedError', 'message': assertion.message }, isEmptyElement);
 					if (!isEmptyElement) {
-						xmlWriter.start('actual', { "value": assertion.actual }, true);
-						xmlWriter.start('expected', { "value": assertion.expected }, true);
+						xmlWriter.start('actual', { 'value': assertion.actual }, true);
+						xmlWriter.start('expected', { 'value': assertion.expected }, true);
 						xmlWriter.end();  //'failure'
 					}
 				}

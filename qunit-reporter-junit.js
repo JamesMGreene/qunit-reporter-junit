@@ -308,19 +308,19 @@
 				xmlWriter.start('testcase', {
 					name: test.name,
 					time: convertMillisToSeconds(test.time),  // ms → sec
-					timestamp: toISODateString(test.start)
 				});
 
 				for (a = 0, aLen = test.failedAssertions.length; a < aLen; a++) {
 					assertion = test.failedAssertions[a];
 
 					isEmptyElement = assertion && !(assertion.actual && assertion.expected);
-					xmlWriter.start('failure', { type: 'AssertionFailedError', message: assertion.message }, isEmptyElement);
+					var msg = '';
 					if (!isEmptyElement) {
-						xmlWriter.start('actual', { value: assertion.actual }, true);
-						xmlWriter.start('expected', { value: assertion.expected }, true);
-						xmlWriter.end();  //'failure'
+						msg = 'Actual value = ' + assertion.actual + '; expected value = ' + assertion.expected						;
+					} else {
+						msg = assertion.message
 					}
+					xmlWriter.start('failure', { type: 'AssertionFailedError', message: msg }, isEmptyElement);
 				}
 
 				xmlWriter.end();  //'testcase'

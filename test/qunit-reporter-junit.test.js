@@ -31,5 +31,13 @@
 		assert.equal(1, 3, 'Assert fail 1 = 3');
 	});
 
+	module('Outer Nested Modules', function() {
+		module('Inner Module', function() {
+			test('runs tests', function(assert) {
+				assert.equal(1, 1, 'Assert 1 = 1');
+				assert.equal(1, 2, 'Assert 1 = 2');
+			});
+		});
+	});
 
 })( QUnit.module, QUnit.test );

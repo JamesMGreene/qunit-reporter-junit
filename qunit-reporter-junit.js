@@ -308,7 +308,8 @@
 				xmlWriter.start('testcase', {
 					name: test.name,
 					time: convertMillisToSeconds(test.time),  // ms → sec
-					timestamp: toISODateString(test.start)
+					timestamp: toISODateString(test.start),
+					classname: module.name
 				});
 
 				for (a = 0, aLen = test.failedAssertions.length; a < aLen; a++) {

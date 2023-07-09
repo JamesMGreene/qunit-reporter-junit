@@ -37,7 +37,7 @@
     "test": "grunt test"
   },
   "peerDependencies": {
-    "qunitjs": "*"
+    "qunit": "*"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -46,6 +46,6 @@
     "grunt-contrib-qunit": "^1.2.0",
     "grunt-git-authors": "^3.2.0",
     "grunt-lib-phantomjs": "^1.1.0",
-    "qunitjs": "^2.0.1"
+    "qunit": "^1.0.0"
   }
 }
